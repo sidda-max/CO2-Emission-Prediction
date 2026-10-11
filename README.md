@@ -1,4 +1,5 @@
 # CO₂ Emission Prediction Using Machine Learning
+**Live Demo:** https://sidda.pythonanywhere.com/
 
 ## Overview
 
@@ -109,11 +110,11 @@ The actual evaluation results are printed in the terminal when the application s
 
 ## Future Improvements
 
-- Improve input validation and error handling.
-- Compare Linear Regression with other regression algorithms.
-- Add visualizations of predicted versus actual emissions.
-- Deploy the web application so it can be accessed online.
-
+- Improve the user interface and user experience.
+- Explore additional machine learning models and compare their performance.
+- Enhance input validation and error handling.
+- Monitor and maintain the deployed application.
+- 
 ## Author
 
 **Sidda Teja**
