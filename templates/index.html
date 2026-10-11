@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CO₂ Emission Predictor</title>
+<style>
+:root{--navy:#16324f;--green:#16845b;--green-dark:#116b49;--page:#f3f7f5;--text:#20312b;--muted:#64746d;--border:#dce6e0}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--page);color:var(--text);line-height:1.5}
+header{background:var(--navy);color:white;padding:28px 20px;text-align:center}header .eyebrow{margin:0 0 6px;color:#bfe9d4;text-transform:uppercase;letter-spacing:2px;font-size:.78rem;font-weight:700}
+header h1{margin:0;font-size:clamp(1.8rem,4vw,2.5rem)}header p{margin:8px auto 0;max-width:650px;color:#e1ece8}
+main{width:min(920px,calc(100% - 32px));margin:32px auto 48px}.intro{margin-bottom:22px}.intro h2{margin:0 0 5px;color:var(--navy);font-size:1.4rem}.intro p{margin:0;color:var(--muted)}
+form{background:white;border:1px solid var(--border);border-radius:18px;padding:clamp(18px,4vw,32px);box-shadow:0 10px 30px rgba(22,50,79,.07)}
+.section-title{margin:0 0 18px;padding-bottom:10px;border-bottom:1px solid var(--border);color:var(--navy);font-size:1.05rem}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 20px;margin-bottom:28px}.field{min-width:0}
+label{display:block;margin-bottom:7px;font-weight:700;font-size:.94rem}input,select{width:100%;min-height:46px;padding:10px 12px;border:1px solid #cbd8d1;border-radius:9px;background:white;color:var(--text);font:inherit}
+input:focus,select:focus{outline:3px solid rgba(22,132,91,.16);border-color:var(--green)}
+.actions{display:flex;justify-content:flex-end;gap:12px;flex-wrap:wrap}button{min-height:46px;padding:11px 22px;border:0;border-radius:9px;background:var(--green);color:white;font:inherit;font-weight:700;cursor:pointer}button:hover{background:var(--green-dark)}
+.result{margin-top:22px;padding:22px;border:1px solid #b9e1cc;border-radius:14px;background:#eaf7ef;text-align:center}.result h2{margin:0 0 5px;color:var(--green-dark);font-size:1.05rem}.result .value{margin:0;color:var(--navy);font-size:clamp(2rem,5vw,3rem);font-weight:800}.result p:last-child{margin:5px 0 0;color:var(--muted)}
+footer{padding:18px;text-align:center;color:var(--muted);font-size:.85rem}@media(max-width:640px){.fields{grid-template-columns:1fr}.actions button{width:100%}}
+</style>
+</head>
+<body>
+<header>
+<p class="eyebrow">Machine Learning Project</p>
+<h1>CO₂ Emission Predictor</h1>
+<p>Estimate vehicle carbon dioxide emissions from engine and fuel-consumption details.</p>
+</header>
+<main>
+<div class="intro"><h2>Vehicle details</h2><p>Enter the vehicle information below, then select Predict to estimate its CO₂ emissions.</p></div>
+<!-- Keep field names and option values compatible with app.py. -->
+<form action="{{ url_for('predict') }}" method="post">
+<h3 class="section-title">Engine information</h3>
+<div class="fields">
+<div class="field"><label for="engine_size">Engine Size</label><input id="engine_size" type="number" name="Engine_Size" step="any" min="0" required></div>
+<div class="field"><label for="cylinders">Cylinders</label><input id="cylinders" type="number" name="Cylinders" step="1" min="1" required></div>
+</div>
+<h3 class="section-title">Fuel consumption</h3>
+<div class="fields">
+<div class="field"><label for="fuel_city">Fuel Consumption City (L/100 km)</label><input id="fuel_city" type="number" name="Fuel_Consumption_City" step="any" min="0" required></div>
+<div class="field"><label for="fuel_hwy">Fuel Consumption Hwy (L/100 km)</label><input id="fuel_hwy" type="number" name="Fuel_Consumption_Hwy" step="any" min="0" required></div>
+<div class="field"><label for="fuel_comb">Fuel Consumption Comb (L/100 km)</label><input id="fuel_comb" type="number" name="Fuel_Consumption_Comb" step="any" min="0" required></div>
+<div class="field"><label for="fuel_mpg">Fuel Consumption Comb (mpg)</label><input id="fuel_mpg" type="number" name="Fuel_Consumption_Comb_mpg" step="any" min="0" required></div>
+</div>
+<h3 class="section-title">Vehicle category</h3>
+<div class="fields">
+<div class="field"><label for="fuel_type">Fuel Type</label><select id="fuel_type" name="Fuel_Type" required><option value="" selected disabled>Select fuel type</option><option value="E">Type E</option><option value="X">Type X</option><option value="Z">Type Z</option></select></div>
+<div class="field"><label for="transmission">Transmission Type</label><select id="transmission" name="Transmission" required><option value="" selected disabled>Select transmission</option>{% for option in ['A4','A5','A6','A7','A8','A9','AM5','AM6','AM7','AM8','AM9','AS4','AS5','AS6','AS7','AS8','AS9','AS10','AV','AV6','AV7','AV8','AV10','M5','M6','M7'] %}<option value="{{ option }}">{{ option }}</option>{% endfor %}</select></div>
+<div class="field"><label for="make">Make category</label><select id="make" name="Make" required><option value="" selected disabled>Select make category</option><option value="Luxury">Luxury</option><option value="Premium">Premium</option><option value="Sports">Sports</option></select></div>
+<div class="field"><label for="vehicle_class">Vehicle Class</label><select id="vehicle_class" name="Vehicle_Class" required><option value="" selected disabled>Select vehicle class</option><option value="SUV">SUV</option><option value="Sedan">Sedan</option><option value="Truck">Truck</option></select></div>
+</div>
+<div class="actions"><button type="reset" style="background:#e7eeea;color:#20312b">Clear form</button><button type="submit">Predict CO₂ emissions</button></div>
+</form>
+{% if prediction_text %}<section class="result" aria-live="polite"><h2>Estimated CO₂ emissions</h2><p class="value">{{ prediction_text }}</p><p>Prediction from the machine-learning model. Confirm the dataset's unit before interpreting this value.</p></section>{% endif %}
+</main>
+<footer>CO₂ Emission Predictor · Machine Learning Demonstration</footer>
+</body>
+</html>
